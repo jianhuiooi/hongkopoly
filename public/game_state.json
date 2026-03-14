@@ -1,0 +1,28 @@
+{
+  "turn": 0,
+  "timestamp": 0,
+  "game_over": false,
+  "event_log": ["Waiting for simulation to start…"],
+  "owned": {},
+  "players": [
+    {
+      "name": "player1",
+      "position": 0,
+      "cash": 1500,
+      "has_lost": false,
+      "icon": "🧋",
+      "color": "#e63946",
+      "in_jail": false
+    },
+    {
+      "name": "player2",
+      "position": 0,
+      "cash": 1500,
+      "has_lost": false,
+      "icon": "🥟",
+      "color": "#457b9d",
+      "in_jail": false
+    }
+  ],
+  "board_names": {}
+}
