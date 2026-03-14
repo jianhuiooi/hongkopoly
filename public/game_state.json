@@ -1,11 +1,11 @@
 {
-  "turn": 150,
-  "timestamp": 1773500942.8379514,
+  "turn": 158,
+  "timestamp": 1773500950.869571,
   "players": [
     {
       "name": "player1",
-      "position": 20,
-      "cash": 441,
+      "position": 0,
+      "cash": 245,
       "has_lost": false,
       "icon": "\ud83e\uddcb",
       "color": "#e63946",
@@ -13,8 +13,8 @@
     },
     {
       "name": "player2",
-      "position": 4,
-      "cash": 3275,
+      "position": 15,
+      "cash": 4071,
       "has_lost": false,
       "icon": "\ud83e\udd5f",
       "color": "#457b9d",
@@ -23,18 +23,18 @@
   ],
   "owned": {},
   "event_log": [
-    "[T145] player1 moved 12\u219221 (Milk Tea) | \ud83d\udcb0$301",
-    "[T145] player2 moved 35\u21922 (Community Chest) | \ud83d\udcb0$3115",
-    "[T146] player1 moved 21\u219227 (Swiss Chicken Wings) | \ud83d\udcb0$301",
-    "[T146] player2 moved 2\u219212 (Electric Co.) | \ud83d\udcb0$3115",
-    "[T147] player1 moved 27\u219239 (Mayfair \u2192 The Peak) | \ud83d\udcb0$251",
-    "[T147] player2 moved 12\u219219 (Turnip Cake) | \ud83d\udcb0$3165",
-    "[T148] player1 moved 39\u21927 (Chance) | \ud83d\udcb0$451",
-    "[T148] player2 moved 19\u219228 (Water Works) | \ud83d\udcb0$3165",
-    "[T149] player1 moved 7\u219211 (Curry Fish Ball) | \ud83d\udcb0$441",
-    "[T149] player2 moved 28\u219233 (Community Chest) | \ud83d\udcb0$3275",
-    "[T150] player1 moved 11\u219220 (Free Parking) | \ud83d\udcb0$441",
-    "[T150] player2 moved 33\u21924 (Income Tax) | \ud83d\udcb0$3275"
+    "[T153] player1 moved 35\u21923 (Egg Waffle) | \ud83d\udcb0$91",
+    "[T153] player2 moved 21\u219228 (Water Works) | \ud83d\udcb0$3825",
+    "[T154] player1 moved 3\u219211 (Curry Fish Ball) | \ud83d\udcb0$81",
+    "[T154] player2 moved 28\u21920 (GO) | \ud83d\udcb0$4035",
+    "[T155] player1 moved 11\u219219 (Turnip Cake) | \ud83d\udcb0$81",
+    "[T155] player2 moved 0\u21923 (Egg Waffle) | \ud83d\udcb0$4035",
+    "[T156] player1 moved 19\u219228 (Water Works) | \ud83d\udcb0$45",
+    "[T156] player2 moved 3\u21927 (Chance) | \ud83d\udcb0$4071",
+    "[T157] player1 moved 28\u219231 (Roast Goose) | \ud83d\udcb0$45",
+    "[T157] player2 moved 7\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4071",
+    "[T158] player1 moved 31\u21920 (GO) | \ud83d\udcb0$245",
+    "[T158] player2 moved 10\u219215 (Star Ferry) | \ud83d\udcb0$4071"
   ],
   "board_names": {
     "0": "GO",
