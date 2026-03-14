@@ -1,40 +1,40 @@
 {
-  "turn": 158,
-  "timestamp": 1773500950.869571,
+  "turn": 163,
+  "timestamp": 1773500955.8915617,
   "players": [
     {
       "name": "player1",
-      "position": 0,
-      "cash": 245,
-      "has_lost": false,
+      "position": 39,
+      "cash": 21,
+      "has_lost": true,
       "icon": "\ud83e\uddcb",
       "color": "#e63946",
       "in_jail": false
     },
     {
       "name": "player2",
-      "position": 15,
-      "cash": 4071,
+      "position": 10,
+      "cash": 4195,
       "has_lost": false,
       "icon": "\ud83e\udd5f",
       "color": "#457b9d",
-      "in_jail": false
+      "in_jail": true
     }
   ],
   "owned": {},
   "event_log": [
-    "[T153] player1 moved 35\u21923 (Egg Waffle) | \ud83d\udcb0$91",
-    "[T153] player2 moved 21\u219228 (Water Works) | \ud83d\udcb0$3825",
-    "[T154] player1 moved 3\u219211 (Curry Fish Ball) | \ud83d\udcb0$81",
-    "[T154] player2 moved 28\u21920 (GO) | \ud83d\udcb0$4035",
-    "[T155] player1 moved 11\u219219 (Turnip Cake) | \ud83d\udcb0$81",
-    "[T155] player2 moved 0\u21923 (Egg Waffle) | \ud83d\udcb0$4035",
-    "[T156] player1 moved 19\u219228 (Water Works) | \ud83d\udcb0$45",
-    "[T156] player2 moved 3\u21927 (Chance) | \ud83d\udcb0$4071",
-    "[T157] player1 moved 28\u219231 (Roast Goose) | \ud83d\udcb0$45",
-    "[T157] player2 moved 7\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4071",
-    "[T158] player1 moved 31\u21920 (GO) | \ud83d\udcb0$245",
-    "[T158] player2 moved 10\u219215 (Star Ferry) | \ud83d\udcb0$4071"
+    "[T158] player2 moved 10\u219215 (Star Ferry) | \ud83d\udcb0$4071",
+    "[T159] player1 moved 0\u219210 (Jail / Just Visiting) | \ud83d\udcb0$145",
+    "[T159] player2 moved 15\u219222 (Chance) | \ud83d\udcb0$4071",
+    "[T160] player1 moved 10\u219222 (Chance) | \ud83d\udcb0$145",
+    "[T160] player2 moved 22\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4071",
+    "[T161] player1 moved 22\u219228 (Water Works) | \ud83d\udcb0$121",
+    "[T161] player2 moved 10\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4095",
+    "[T162] player1 moved 28\u219235 (Kowloon Station) | \ud83d\udcb0$21",
+    "[T162] player2 moved 10\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4195",
+    "[T163] player1 moved 35\u219239 (Mayfair \u2192 The Peak) | \ud83d\udcb0$21",
+    "[T163] player2 moved 10\u219210 (Jail / Just Visiting) | \ud83d\udcb0$4195",
+    "\ud83c\udfc6 player2 WINS! player1 is bankrupt."
   ],
   "board_names": {
     "0": "GO",
@@ -78,5 +78,5 @@
     "38": "Super Tax",
     "39": "Mayfair \u2192 The Peak"
   },
-  "game_over": false
+  "game_over": true
 }
