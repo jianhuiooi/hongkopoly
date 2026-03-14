@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HONGKOPOLY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens ───────────────────────────────────────────────── */
+:root {
+  --bg:        #d8e8d2;        /* sage green — matches your board */
+  --board-bg:  #c8dbc2;
+  --cell-bg:   #e0ece0;
+  --border:    #111;
+  --red:       #c0392b;
+  --yellow:    #f1c40f;
+  --blue:      #5ba3c9;
+  --orange:    #e67e22;
+  --green:     #27ae60;
+  --purple:    #8e44ad;
+  --brown:     #795548;
+  --white:     #fff;
+  --text:      #111;
+  --cell-size: 70px;
+  --corner:    110px;
+  --font-head: 'Bebas Neue', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+}
+
+/* ── Title ───────────────────────────────────────────────────────── */
+.title-banner {
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 2.8rem;
+  letter-spacing: 3px;
+  padding: 10px 50px;
+  border-radius: 6px;
+  border: 4px solid #111;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: 6px 6px 0 #111;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────── */
+.game-wrap {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ── Board ───────────────────────────────────────────────────────── */
+.board {
+  display: grid;
+  grid-template-columns: var(--corner) repeat(9, var(--cell-size)) var(--corner);
+  grid-template-rows:    var(--corner) repeat(9, var(--cell-size)) var(--corner);
+  border: 4px solid var(--border);
+  background: var(--board-bg);
+  flex-shrink: 0;
+}
+
+/* center logo */
+.board-center {
+  grid-column: 2 / 11;
+  grid-row:    2 / 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--board-bg);
+  border: 3px solid var(--border);
+  gap: 10px;
+  padding: 10px;
+}
+.center-title {
+  font-family: var(--font-head);
+  font-size: 3rem;
+  color: var(--red);
+  letter-spacing: 2px;
+  background: #fff;
+  padding: 6px 20px;
+  border: 3px solid #111;
+  transform: rotate(-5deg);
+  box-shadow: 4px 4px 0 #111;
+}
+.center-subtitle {
+  font-size: 0.8rem;
+  color: #555;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.dice-display {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+.die {
+  width: 44px; height: 44px;
+  background: #fff;
+  border: 3px solid #111;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 3px 3px 0 #111;
+  transition: transform 0.2s;
+}
+.die.rolling { animation: spin 0.3s ease; }
+@keyframes spin {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ── Cells ───────────────────────────────────────────────────────── */
+.cell {
+  border: 1.5px solid var(--border);
+  background: var(--cell-bg);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 2px;
+  cursor: default;
+  transition: background 0.2s;
+}
+.cell:hover { background: #d0e4d0; }
+
+/* color stripe */
+.color-stripe {
+  position: absolute;
+  background: var(--stripe-color, transparent);
+}
+
+/* bottom row & top row — stripe on top/bottom */
+.cell.bottom .color-stripe {
+  top: 0; left: 0; right: 0;
+  height: 18px;
+}
+.cell.top .color-stripe {
+  bottom: 0; left: 0; right: 0;
+  height: 18px;
+}
+/* left col — stripe on right */
+.cell.left .color-stripe {
+  top: 0; bottom: 0; right: 0;
+  width: 18px;
+}
+/* right col — stripe on left */
+.cell.right .color-stripe {
+  top: 0; bottom: 0; left: 0;
+  width: 18px;
+}
+
+.cell-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.cell-name {
+  font-size: 0.42rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.2;
+  color: var(--text);
+  word-break: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  padding: 0 1px;
+}
+.cell-price {
+  font-size: 0.38rem;
+  color: #555;
+  font-weight: 700;
+}
+
+/* corners */
+.cell.corner {
+  font-family: var(--font-head);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  justify-content: center;
+  gap: 4px;
+}
+.corner-icon { font-size: 2rem; }
+
+/* player tokens on a cell */
+.tokens {
+  position: absolute;
+  top: 2px; left: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  z-index: 10;
+}
+.token {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  box-shadow: 1px 1px 0 #111;
+  transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* owned stripe */
+.owned-flag {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 10px; height: 10px;
+  border-radius: 50% 0 0 0;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────── */
+.sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 240px;
+}
+
+.panel {
+  background: #fff;
+  border: 3px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  box-shadow: 4px 4px 0 #111;
+}
+.panel h3 {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  color: var(--red);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 4px;
+}
+
+/* Player cards */
+.player-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  margin-bottom: 8px;
+  transition: opacity 0.3s;
+}
+.player-card.lost { opacity: 0.4; }
+.player-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+}
+.player-info { flex: 1; }
+.player-name { font-weight: 900; font-size: 0.85rem; }
+.player-cash { font-size: 1rem; font-weight: 700; color: var(--green); }
+.player-pos  { font-size: 0.7rem; color: #777; }
+
+/* Turn counter */
+.turn-badge {
+  font-family: var(--font-head);
+  font-size: 2.2rem;
+  text-align: center;
+  color: var(--border);
+}
+.turn-label { font-size: 0.7rem; text-align: center; color: #888; font-weight: 700; letter-spacing: 1px; }
+
+/* Event log */
+.log-list {
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+.log-list li {
+  padding: 3px 0;
+  border-bottom: 1px solid #eee;
+  color: #444;
+}
+.log-list li:first-child { color: #111; font-weight: 700; }
+
+/* Status badge */
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #aaa;
+  margin-right: 6px;
+}
+.status-dot.live { background: #2ecc71; animation: pulse 1s infinite; }
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+.status-text { font-size: 0.7rem; color: #777; font-weight: 700; }
+
+/* Game over banner */
+.game-over-banner {
+  display: none;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  letter-spacing: 2px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  border: 3px solid #111;
+  box-shadow: 4px 4px 0 #111;
+  animation: pop 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="title-banner">🍵 HONGKOPOLY 🥟</div>
+
+<div class="game-wrap">
+  <div id="board" class="board"><!-- cells injected by JS --></div>
+
+  <div class="sidebar">
+    <!-- Status -->
+    <div class="panel" style="padding: 10px 16px;">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="status-text" id="statusText">Connecting…</span>
+    </div>
+
+    <!-- Game over -->
+    <div class="game-over-banner" id="gameOverBanner">🏆 GAME OVER!</div>
+
+    <!-- Turn counter -->
+    <div class="panel">
+      <div class="turn-label">CURRENT TURN</div>
+      <div class="turn-badge" id="turnCounter">—</div>
+    </div>
+
+    <!-- Players -->
+    <div class="panel">
+      <h3>Players</h3>
+      <div id="playerCards"></div>
+    </div>
+
+    <!-- Dice -->
+    <div class="panel" style="display:flex; gap:16px; justify-content:center;">
+      <div class="die" id="die1">🎲</div>
+      <div class="die" id="die2">🎲</div>
+    </div>
+
+    <!-- Event log -->
+    <div class="panel">
+      <h3>Event Log</h3>
+      <ul class="log-list" id="eventLog"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Board square definitions ──────────────────────────────────────────────
+// 40 squares, index 0 = GO (bottom-right), going counter-clockwise
+// Each: { type, label, color, icon, price }
+// type: corner | road | station | utility | tax | chest | chance | parking | jail | gotojail
+
+const SQUARES = [
+  // Bottom row right→left: 0–10
+  { type:'corner',  label:'GO',               icon:'→',   color:null },
+  { type:'road',    label:'Pineapple Bun',    icon:'🍞',  color:'brown',      price:60  },
+  { type:'chest',   label:'Community Chest',  icon:'📦',  color:null },
+  { type:'road',    label:'Egg Waffle',       icon:'🧇',  color:'brown',      price:60  },
+  { type:'tax',     label:'Income Tax',       icon:'💸',  color:null },
+  { type:'station', label:'MTR Station',      icon:'🚇',  color:null,         price:200 },
+  { type:'road',    label:'Wonton Noodle',    icon:'🍜',  color:'light_blue', price:100 },
+  { type:'chance',  label:'Chance',           icon:'❓',  color:null },
+  { type:'road',    label:'Char Siu Bao',     icon:'🥐',  color:'light_blue', price:100 },
+  { type:'road',    label:'Siu Mai',          icon:'🥟',  color:'light_blue', price:120 },
+  // Left column bottom→top: 10–20
+  { type:'corner',  label:'JAIL',             icon:'⛓️',   color:null },
+  { type:'road',    label:'Curry Fish Ball',  icon:'🍢',  color:'purple',     price:140 },
+  { type:'utility', label:'Electric Co.',     icon:'⚡',  color:null,         price:150 },
+  { type:'road',    label:'Lo Mai Gai',       icon:'🍱',  color:'purple',     price:140 },
+  { type:'road',    label:'Cheung Fun',       icon:'🫔',  color:'purple',     price:160 },
+  { type:'station', label:'Star Ferry',       icon:'⛴️',   color:null,         price:200 },
+  { type:'road',    label:'Dim Sum House',    icon:'🥘',  color:'orange',     price:180 },
+  { type:'chest',   label:'Community Chest',  icon:'📦',  color:null },
+  { type:'road',    label:'Ha Gow',           icon:'🫙',  color:'orange',     price:180 },
+  { type:'road',    label:'Turnip Cake',      icon:'🍰',  color:'orange',     price:200 },
+  // Top row left→right: 20–30
+  { type:'corner',  label:'FREE PARK',        icon:'🅿️',   color:null },
+  { type:'road',    label:'Milk Tea',         icon:'🧋',  color:'red',        price:220 },
+  { type:'chance',  label:'Chance',           icon:'❓',  color:null },
+  { type:'road',    label:'Egg Tart',         icon:'🥚',  color:'red',        price:220 },
+  { type:'road',    label:'Wife Cake',        icon:'🍮',  color:'red',        price:240 },
+  { type:'station', label:'Tram Station',     icon:'🚃',  color:null,         price:200 },
+  { type:'road',    label:'Mango Pudding',    icon:'🍮',  color:'yellow',     price:260 },
+  { type:'road',    label:'Swiss Wings',      icon:'🍗',  color:'yellow',     price:260 },
+  { type:'utility', label:'Water Works',      icon:'💧',  color:null,         price:150 },
+  { type:'road',    label:'Pan-Fried Bun',    icon:'🥯',  color:'yellow',     price:280 },
+  // Right column top→bottom: 30–39
+  { type:'corner',  label:'GO TO JAIL',       icon:'🚔',  color:null },
+  { type:'road',    label:'Roast Goose',      icon:'🦆',  color:'green',      price:300 },
+  { type:'road',    label:'Clay Pot Rice',    icon:'🍚',  color:'green',      price:300 },
+  { type:'chest',   label:'Community Chest',  icon:'📦',  color:null },
+  { type:'road',    label:'Typhoon Crab',     icon:'🦀',  color:'green',      price:320 },
+  { type:'station', label:'Kowloon Stn',      icon:'🚉',  color:null,         price:200 },
+  { type:'chance',  label:'Chance',           icon:'❓',  color:null },
+  { type:'road',    label:'Crispy Pork',      icon:'🥩',  color:'blue',       price:350 },
+  { type:'tax',     label:'Luxury Tax',       icon:'💎',  color:null },
+  { type:'road',    label:'The Peak',         icon:'🏔️',  color:'blue',       price:400 },
+];
+
+const COLOR_MAP = {
+  brown:      '#795548',
+  light_blue: '#5ba3c9',
+  purple:     '#8e44ad',
+  orange:     '#e67e22',
+  red:        '#c0392b',
+  yellow:     '#f1c40f',
+  green:      '#27ae60',
+  blue:       '#1a73e8',
+};
+
+// ── Grid positions (row, col) in 11×11 grid (0-indexed) ──────────────────
+// Square 0 = bottom-right corner, going counter-clockwise
+function gridPos(idx) {
+  if (idx <= 10)  return [10, 10 - idx];          // bottom row right→left
+  if (idx <= 19)  return [10 - (idx - 10), 0];    // left col bottom→top
+  if (idx <= 30)  return [0,  idx - 20];           // top row left→right
+  if (idx <= 39)  return [idx - 30, 10];           // right col top→bottom
+}
+
+function sideOf(idx) {
+  if (idx === 0 || idx === 10 || idx === 20 || idx === 30) return 'corner';
+  if (idx < 10)  return 'bottom';
+  if (idx < 20)  return 'left';
+  if (idx < 30)  return 'top';
+  return 'right';
+}
+
+// ── Build the board DOM ──────────────────────────────────────────────────
+function buildBoard() {
+  const board = document.getElementById('board');
+
+  // Create 11×11 grid of cells
+  const cells = {}; // key: "row-col" → td
+
+  for (let r = 0; r < 11; r++) {
+    for (let c = 0; c < 11; c++) {
+      cells[`${r}-${c}`] = null;
+    }
+  }
+
+  // Place squares
+  SQUARES.forEach((sq, idx) => {
+    const [r, c] = gridPos(idx);
+    const side   = sideOf(idx);
+    const div    = document.createElement('div');
+    div.className = `cell ${side}`;
+    div.id        = `sq-${idx}`;
+    div.style.gridRow    = r + 1;
+    div.style.gridColumn = c + 1;
+
+    // color stripe
+    if (sq.color && COLOR_MAP[sq.color]) {
+      const stripe = document.createElement('div');
+      stripe.className = 'color-stripe';
+      stripe.style.setProperty('--stripe-color', COLOR_MAP[sq.color]);
+      stripe.style.background = COLOR_MAP[sq.color];
+      div.appendChild(stripe);
+    }
+
+    // tokens container
+    const tokens = document.createElement('div');
+    tokens.className = 'tokens';
+    tokens.id = `tokens-${idx}`;
+    div.appendChild(tokens);
+
+    // owned flag
+    const flag = document.createElement('div');
+    flag.className = 'owned-flag';
+    flag.id = `flag-${idx}`;
+    div.appendChild(flag);
+
+    if (side === 'corner') {
+      div.innerHTML += `<span class="corner-icon">${sq.icon}</span><span>${sq.label}</span>`;
+    } else {
+      div.innerHTML += `
+        <span class="cell-icon">${sq.icon}</span>
+        <span class="cell-name">${sq.label}</span>
+        ${sq.price ? `<span class="cell-price">$${sq.price}</span>` : ''}
+      `;
+    }
+
+    board.appendChild(div);
+  });
+
+  // Center cell
+  const center = document.createElement('div');
+  center.className = 'board-center';
+  center.style.gridRow    = '2 / 11';
+  center.style.gridColumn = '2 / 11';
+  center.innerHTML = `
+    <div class="center-title">HONGKOPOLY</div>
+    <div class="center-subtitle">🍵 ICONIC HK BITES EDITION 🥟</div>
+    <div class="dice-display">
+      <div class="die" id="die1">🎲</div>
+      <div class="die" id="die2">🎲</div>
+    </div>
+  `;
+  board.appendChild(center);
+}
+
+// ── State rendering ──────────────────────────────────────────────────────
+const PLAYER_COLORS = ['#e63946', '#457b9d', '#2a9d8f', '#e9c46a'];
+const DICE_FACES    = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+let lastTurn = -1;
+
+function renderState(state) {
+  // Turn counter
+  document.getElementById('turnCounter').textContent = state.turn;
+
+  // Dice animation on new turn
+  if (state.turn !== lastTurn) {
+    ['die1', 'die2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('rolling');
+        const val = Math.ceil(Math.random() * 6);
+        setTimeout(() => {
+          el.textContent = DICE_FACES[val];
+          el.classList.remove('rolling');
+        }, 280);
+      }
+    });
+    lastTurn = state.turn;
+  }
+
+  // Clear all tokens
+  document.querySelectorAll('.tokens').forEach(t => t.innerHTML = '');
+
+  // Place player tokens
+  state.players.forEach((p, i) => {
+    const tokenContainer = document.getElementById(`tokens-${p.position}`);
+    if (tokenContainer) {
+      const tok = document.createElement('div');
+      tok.className = 'token';
+      tok.style.background = p.color || PLAYER_COLORS[i];
+      tok.textContent = p.icon || '●';
+      tok.title = `${p.name} – $${p.cash}`;
+      tokenContainer.appendChild(tok);
+    }
+  });
+
+  // Ownership flags
+  document.querySelectorAll('.owned-flag').forEach(f => f.style.background = '');
+  if (state.owned) {
+    Object.entries(state.owned).forEach(([sqIdx, playerName]) => {
+      const flag = document.getElementById(`flag-${sqIdx}`);
+      const player = state.players.find(p => p.name === playerName);
+      if (flag && player) flag.style.background = player.color || '#333';
+    });
+  }
+
+  // Player cards
+  const cards = document.getElementById('playerCards');
+  cards.innerHTML = '';
+  state.players.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = `player-card${p.has_lost ? ' lost' : ''}`;
+    card.style.borderColor = p.color || PLAYER_COLORS[i];
+    const sq = SQUARES[p.position] || {};
+    card.innerHTML = `
+      <div class="player-avatar" style="background:${p.color || PLAYER_COLORS[i]}20; border-color:${p.color || PLAYER_COLORS[i]}">
+        ${p.icon || '🎲'}
+      </div>
+      <div class="player-info">
+        <div class="player-name">${p.name.toUpperCase()}${p.has_lost ? ' ☠️' : ''}</div>
+        <div class="player-cash">$${p.cash.toLocaleString()}</div>
+        <div class="player-pos">📍 ${sq.label || `Square ${p.position}`}${p.in_jail ? ' ⛓️' : ''}</div>
+      </div>
+    `;
+    cards.appendChild(card);
+  });
+
+  // Event log
+  const log = document.getElementById('eventLog');
+  log.innerHTML = '';
+  (state.event_log || []).slice().reverse().forEach(evt => {
+    const li = document.createElement('li');
+    li.textContent = evt;
+    log.appendChild(li);
+  });
+
+  // Game over
+  if (state.game_over) {
+    const banner = document.getElementById('gameOverBanner');
+    const winner = state.players.find(p => !p.has_lost);
+    banner.textContent = winner ? `🏆 ${winner.name.toUpperCase()} WINS!` : '🏆 GAME OVER!';
+    banner.style.display = 'block';
+  }
+}
+
+// ── Polling ──────────────────────────────────────────────────────────────
+const STATE_URL   = './game_state.json';
+const POLL_MS     = 800;
+let   errorStreak = 0;
+
+async function poll() {
+  try {
+    const res  = await fetch(STATE_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    renderState(data);
+    errorStreak = 0;
+
+    const dot  = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    dot.className  = 'status-dot live';
+    text.textContent = data.game_over
+      ? 'Game finished'
+      : `Live · turn ${data.turn}`;
+
+    if (!data.game_over) setTimeout(poll, POLL_MS);
+    else                  dot.className = 'status-dot';
+
+  } catch (e) {
+    errorStreak++;
+    const dot  = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    dot.className  = 'status-dot';
+    text.textContent = errorStreak < 3
+      ? 'Waiting for simulation…'
+      : `⚠️ Can't reach game_state.json — run the Python script!`;
+    setTimeout(poll, POLL_MS * 2);
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────
+buildBoard();
+poll();
+</script>
+</body>
+</html>
